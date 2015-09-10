@@ -1,0 +1,36 @@
+# coding: utf-
+
+"""
+支持: Python 3.x
+输入： 目标目录
+功能：  1）将目标目录下的所有文件夹中的文件移动到目标目录下, 排除目标目录下文件
+        2) 提示所否删除被提取后的文件夹
+"""
+
+import os, sys
+import os, shutil
+
+inputDir = ""
+inputDir = input("Input directory: ")
+while os.path.exists(inputDir) == False:
+    print("It's not a directory.")
+    inputDir = input("Input directory: ")
+
+for dirPath, dirnames, fileNames in os.walk(inputDir):
+    if os.path.exists(dirPath) and inputDir != dirPath:
+        for file in fileNames:
+            filePath = dirPath + "\\"+  file
+            if os.path.isfile(filePath):
+                shutil.move(filePath, inputDir)
+
+print("Move Done!")
+while 1:
+    delCmd = input("Delete emtpy directrys, y or n ? ")
+    if delCmd in ("y, yes"):
+        for dirPath, dirnames, fileNames in os.walk(inputDir):
+            if inputDir != dirPath:
+                shutil.rmtree(dirPath)
+        print("Delete Done!")
+        sys.exit(0)
+    elif delCmd in ("n, no"):
+        sys.exit(0)
